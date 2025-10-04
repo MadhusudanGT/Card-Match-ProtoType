@@ -6,14 +6,20 @@ public class PoolManager<T> where T : Component
     private readonly Queue<T> objects = new Queue<T>();
     private readonly T prefab;
     private readonly Transform parent;
+    private readonly int expandSize;
 
-    public PoolManager(T prefab, int initialSize, Transform parent = null)
+    public PoolManager(T prefab, int initialSize, Transform parent = null, int expandSize = 10)
     {
         this.prefab = prefab;
         this.parent = parent;
+        this.expandSize = expandSize;
 
-        // Pre-instantiate objects
-        for (int i = 0; i < initialSize; i++)
+        Expand(initialSize); // pre-instantiate pool
+    }
+
+    private void Expand(int count)
+    {
+        for (int i = 0; i < count; i++)
         {
             T newObj = Object.Instantiate(prefab, parent);
             newObj.gameObject.SetActive(false);
@@ -21,14 +27,12 @@ public class PoolManager<T> where T : Component
         }
     }
 
+    // Get object from pool (does NOT auto-release)
     public T Get()
     {
         if (objects.Count == 0)
         {
-            // Expand dynamically
-            T newObj = Object.Instantiate(prefab, parent);
-            newObj.gameObject.SetActive(false);
-            objects.Enqueue(newObj);
+            Expand(expandSize); // batch expand
         }
 
         T obj = objects.Dequeue();
@@ -36,12 +40,15 @@ public class PoolManager<T> where T : Component
         return obj;
     }
 
+    // Return object to pool manually
     public void ReturnToPool(T obj)
     {
         obj.gameObject.SetActive(false);
         objects.Enqueue(obj);
+        obj.transform.SetParent(parent);
     }
 
+    // Clear all objects in pool
     public void Clear()
     {
         while (objects.Count > 0)
