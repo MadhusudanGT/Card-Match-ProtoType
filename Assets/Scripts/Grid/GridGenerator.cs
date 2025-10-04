@@ -34,10 +34,14 @@ public class GridGenerator : MonoBehaviour
     {
         gridConfig.rows = 5;
         gridConfig.cols = 5;
-        GenerateBtnClicked();
     }
 
-    void GenerateBtnClicked()
+    public void InitBoard()
+    {
+        Debug.Log("init board");
+        GenerateBtnClicked();
+    }
+    private void GenerateBtnClicked()
     {
         if (!string.IsNullOrEmpty(rowInputValue.text) && !string.IsNullOrEmpty(colInputValue.text))
         {

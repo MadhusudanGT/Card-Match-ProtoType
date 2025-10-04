@@ -33,5 +33,6 @@ public abstract class GridBase : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         Flip();
+        EventBus.Invoke<string>(GameEvents.TURNS,"");
     }
 }

@@ -46,11 +46,12 @@ public class GridMatchManager : MonoBehaviour
             first.SetMatched();
             second.SetMatched();
             matchedPairs++;
+            EventBus.Invoke<int>(GameEvents.MATCHED_PAIRS, matchedPairs);
             int total = gridConfig.rows * gridConfig.cols / 2;
-            Debug.Log(total+"..."+matchedPairs);
             if (matchedPairs == total)
             {
                 Debug.Log("Winner!!");
+                EventBus.Invoke<bool>(GameEvents.GAME_END, true);
             }
         }
         else

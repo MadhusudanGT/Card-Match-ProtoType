@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 133c9c0836b423a4e8a8dfb1cb9de18a, type: 3}
   m_Name: GridConfig
   m_EditorClassIdentifier: 
-  rows: 5
-  cols: 5
+  rows: 4
+  cols: 4
   minRows: 2
   maxRows: 5
   minCols: 2
   maxCols: 5
+  spacingX: 250
+  spacingY: 250
   listOfItems:
   - {fileID: 11400000, guid: 403b64ab191efc3428aa8db46c0322c6, type: 2}
   - {fileID: 11400000, guid: bd148421bd71e0b47a3823e2cd8671e2, type: 2}
@@ -35,3 +37,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f7a3e24525ccd2b469772ac49298423a, type: 2}
   - {fileID: 11400000, guid: b09be4ccdd29ec048b1aeb9c3e6ba887, type: 2}
   - {fileID: 11400000, guid: 65dd5a7e5923ed84b865bca13b07f1df, type: 2}
+  numberOfTurns: 20

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class Grid : GridBase
 {
-    [SerializeField] Image gridImage;
+    [SerializeField] Image gridImage,bgPanel;
     private void OnEnable()
     {
         EventBus.Subscribe<string>(GameEvents.RELEASE_ALL_GRIDS, ReleaseGrid);
@@ -50,8 +50,10 @@ public class Grid : GridBase
     }
     void ReleaseGrid(string reason)
     {
-        transform.SetParent(null);
-        PoolController.Instance?.DespawnCard(this);
+        //transform.SetParent(null);
+        //PoolController.Instance?.DespawnCard(this);
+        gridImage.enabled = false;
+        bgPanel.enabled = false;
     }
 
     public void SetMatched()
