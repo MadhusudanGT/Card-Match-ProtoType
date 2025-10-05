@@ -32,8 +32,11 @@ public abstract class GridBase : MonoBehaviour, IPointerClickHandler
     protected abstract void Flip();
     public void OnPointerClick(PointerEventData eventData)
     {
-        SoundManager.Instance?.PlayFlip();
-        Flip();
-        EventBus.Invoke<string>(GameEvents.TURNS, "");
+        if (!GameManager.Instance.gridMatchManager.isCheckingMatch)
+        {
+            SoundManager.Instance?.PlayFlip();
+            Flip();
+            EventBus.Invoke<string>(GameEvents.TURNS, "");
+        }
     }
 }

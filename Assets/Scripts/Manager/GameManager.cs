@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private UIManager uiManager;
     [SerializeField] private GridGenerator gridSpawner;
-    [SerializeField] private GridMatchManager gridMatchManager;
+    [SerializeField] public GridMatchManager gridMatchManager;
     [SerializeField] GridConfig gridConfig = null;
     [SerializeField] int numberOfTurnsLeft, matchedGridCount = 0;
     [SerializeField] GameStatus gameState;
@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
 
     public void Replay()
     {
+        SaveManager.ClearSave();
         gameState = global::GameStatus.InProgress;
         gridSpawner.InitBoard();
         numberOfTurnsLeft = gridConfig.numberOfTurns;
@@ -72,6 +73,13 @@ public class GameManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         SaveGame();
+    }
+    void OnApplicationFocus(bool hasFocus)
+    {
+        if (!hasFocus)
+        {
+            SaveGame();
+        }
     }
     public void SaveGame()
     {

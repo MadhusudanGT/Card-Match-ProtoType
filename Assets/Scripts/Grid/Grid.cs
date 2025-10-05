@@ -1,10 +1,11 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Grid : GridBase
 {
     [SerializeField] Image gridImage, bgPanel;
+    private Tween currentFlipTween;
     private void OnEnable()
     {
         EventBus.Subscribe<string>(GameEvents.RELEASE_ALL_GRIDS, ReleaseGrid);
@@ -24,21 +25,26 @@ public class Grid : GridBase
 
     protected override void Flip()
     {
-        if (isMatched) { return; }
+        if (isMatched) return;
+
+        currentFlipTween?.Kill();
 
         IsFaceUp = !IsFaceUp;
         EventBus.Invoke<Grid>(GameEvents.FLIP_ACTION, this);
 
-        transform.DORotate(new Vector3(0, 90, 0), 0.1f)
-       .OnComplete(() =>
-       {
-           transform.DORotate(new Vector3(0, 0, 0), 0.1f)
-               .OnComplete(() =>
-               {
-                   gridImage.enabled = IsFaceUp;
-                   gridImage.sprite = sprite;
-               });
-       });
+        currentFlipTween = transform
+           .DORotate(new Vector3(0, 90, 0), 0.1f)
+           .OnComplete(() =>
+           {
+               transform
+                   .DORotate(new Vector3(0, 0, 0), 0.1f)
+                   .OnComplete(() =>
+                   {
+                       gridImage.enabled = IsFaceUp;
+                       gridImage.sprite = sprite;
+                   });
+           });
+
     }
 
     public void WrongMatch()
@@ -46,6 +52,7 @@ public class Grid : GridBase
         gridImage.enabled = false;
         Flip();
     }
+
     void ReleaseGrid(string reason)
     {
         gridImage.enabled = false;
@@ -55,7 +62,7 @@ public class Grid : GridBase
     public void SetMatched()
     {
         isMatched = true;
-        transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack).OnComplete(() =>
+        transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBack).OnComplete(() =>
         {
             ReleaseGrid("");
         });

@@ -5,10 +5,10 @@ using UnityEngine;
 public class GridMatchManager : MonoBehaviour
 {
     [SerializeField] GridConfig gridConfig;
-    private List<Grid> flippedCards = new List<Grid>();
+    private Queue<Grid> flippedCards = new Queue<Grid>();
     public int matchedPairs;
 
-    private bool isCheckingMatch = false;
+    public bool isCheckingMatch = false;
     private void OnEnable()
     {
         EventBus.Subscribe<Grid>(GameEvents.FLIP_ACTION, OnGridFlipped);
@@ -21,25 +21,27 @@ public class GridMatchManager : MonoBehaviour
 
     void OnGridFlipped(Grid grid)
     {
-        if (isCheckingMatch) return;
+        if (isCheckingMatch)
+        {
+            Debug.Log(isCheckingMatch+"...On Grid Flipped.." + grid.itemsType);
+            return;
+        }
+
         if (flippedCards.Contains(grid)) return;
+        flippedCards.Enqueue(grid);
 
-        flippedCards.Add(grid);
-
+        //Debug.Log(isCheckingMatch + "...isCheckingMatch.." + flippedCards.Count);
         if (flippedCards.Count == 2)
         {
-            Grid grid1 = flippedCards[0];
-            Grid grid2 = flippedCards[1];
-            flippedCards.Remove(grid1);
-            flippedCards.Remove(grid2);
-            StartCoroutine(CheckMatch(grid1, grid2));
+            StartCoroutine(CheckMatch());
         }
     }
 
-    IEnumerator CheckMatch(Grid first, Grid second)
+    IEnumerator CheckMatch()
     {
+        Grid first = flippedCards.Dequeue();
+        Grid second = flippedCards.Dequeue();
         isCheckingMatch = true;
-        yield return new WaitForSeconds(0.3f);
         if (first.itemsType == second.itemsType)
         {
             SoundManager.Instance?.PlayMatch();
@@ -48,21 +50,19 @@ public class GridMatchManager : MonoBehaviour
             matchedPairs++;
             EventBus.Invoke<int>(GameEvents.MATCHED_PAIRS, matchedPairs);
             int total = gridConfig.rows * gridConfig.cols / 2;
-            Debug.Log(total + "..." + matchedPairs);
             if (matchedPairs == total)
             {
-                Debug.Log("Winner!!");
                 EventBus.Invoke<bool>(GameEvents.GAME_END, true);
             }
         }
         else
         {
+            yield return new WaitForSeconds(0.3f);
             SoundManager.Instance?.PlayMismatch();
             first.WrongMatch();
             second.WrongMatch();
         }
-
-        flippedCards.Clear();
+        //Debug.Log(first.itemsType + "..." + second.itemsType);
         isCheckingMatch = false;
     }
 }

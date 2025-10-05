@@ -163,6 +163,8 @@ public class GridGenerator : MonoBehaviour
             Grid card = child.GetComponent<Grid>();
             if (card != null)
             {
+                card.IsFaceUp = false;
+                card.isMatched = false;
                 child.SetParent(null);
                 PoolController.Instance.DespawnCard(card);
             }
