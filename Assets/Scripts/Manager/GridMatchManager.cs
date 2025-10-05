@@ -6,8 +6,7 @@ public class GridMatchManager : MonoBehaviour
 {
     [SerializeField] GridConfig gridConfig;
     private List<Grid> flippedCards = new List<Grid>();
-    private int totalPairs;
-    private int matchedPairs;
+    public int matchedPairs;
 
     private bool isCheckingMatch = false;
     private void OnEnable()
@@ -48,6 +47,7 @@ public class GridMatchManager : MonoBehaviour
             matchedPairs++;
             EventBus.Invoke<int>(GameEvents.MATCHED_PAIRS, matchedPairs);
             int total = gridConfig.rows * gridConfig.cols / 2;
+            Debug.Log(total + "..." + matchedPairs);
             if (matchedPairs == total)
             {
                 Debug.Log("Winner!!");

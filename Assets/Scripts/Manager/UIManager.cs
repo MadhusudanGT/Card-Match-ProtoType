@@ -19,12 +19,12 @@ public class UIManager : MonoBehaviour
     private void OnEnable()
     {
         replay.onClick.AddListener(ReplayBtnClick);
-        playBtn.onClick.AddListener(ReplayBtnClick);
+        playBtn.onClick.AddListener(PlayBtn);
     }
     private void OnDisable()
     {
         replay.onClick.RemoveListener(ReplayBtnClick);
-        playBtn.onClick.RemoveListener(ReplayBtnClick);
+        playBtn.onClick.RemoveListener(PlayBtn);
     }
     public void ToggleEditorPanel()
     {
@@ -50,8 +50,17 @@ public class UIManager : MonoBehaviour
     }
     void ReplayBtnClick()
     {
-        Debug.Log("Replay BTN CLICKED");
         GameManager.Instance?.Replay();
+        DisableScreen();
+    }
+    void PlayBtn()
+    {
+        GameManager.Instance?.StartNewGame();
+        Invoke(nameof(DisableScreen), 0.5f);
+    }
+
+    void DisableScreen()
+    {
         splashScreen.gameObject.SetActive(false);
     }
 }

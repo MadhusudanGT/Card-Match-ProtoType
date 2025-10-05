@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +10,7 @@ public class GridGenerator : MonoBehaviour
     [Header("UI References")]
     [SerializeField] InputField rowInputValue = null;
     [SerializeField] InputField colInputValue = null;
-    [SerializeField] Button generateBtn = null;
+    [SerializeField] InputField totalTurns = null;
     [SerializeField] GridLayoutGroup gridLayoutGroup = null;
     [SerializeField] ScrollRect scrollRect = null;
     [SerializeField] Transform parent;
@@ -19,23 +20,13 @@ public class GridGenerator : MonoBehaviour
     [SerializeField] GridConfig gridConfig = null;
 
     private List<GridData> gameGridsData = new List<GridData>();
-
-    private void OnEnable()
-    {
-        generateBtn.onClick.AddListener(GenerateBtnClicked);
-    }
-
-    private void OnDisable()
-    {
-        generateBtn.onClick.RemoveListener(GenerateBtnClicked);
-    }
+    [field: SerializeField] List<Grid> isFlipedGrid;
+    [field: SerializeField] List<Grid> isMatchedGrid;
 
     private void Start()
     {
-        gridConfig.rows = 5;
-        gridConfig.cols = 5;
+        totalTurns.text = gridConfig.numberOfTurns.ToString();
     }
-
     public void InitBoard()
     {
         Debug.Log("init board");
@@ -115,6 +106,45 @@ public class GridGenerator : MonoBehaviour
         }
     }
 
+    public void SetTheGridLayout(int row)
+    {
+        gridLayoutGroup.constraintCount = row;
+    }
+
+    public void GenerateGridByData(SaveGridData gridData, int index)
+    {
+        Grid card = PoolController.Instance?.SpawnCard(Vector3.zero, Quaternion.identity);
+        if (card == null) return;
+        GridData data = gridConfig.listOfItems.FirstOrDefault(item => item.itemType == gridData.itemType);
+
+        card.Init(data);
+
+        card.transform.SetParent(parent, false);
+        card.transform.localScale = Vector3.one;
+
+
+        if (!gridData.isMatched && gridData.isFliped)
+        {
+            isFlipedGrid.Add(card);
+        }
+
+        if (gridData.isFliped && gridData.isMatched)
+        {
+            isMatchedGrid.Add(card);
+        }
+    }
+
+    public void FlipTheGridFromSaveData()
+    {
+        for (int i = 0; i < isFlipedGrid.Count; i++)
+        {
+            isFlipedGrid[i].FlipedGridLoadData();
+        }
+        for (int i = 0; i < isMatchedGrid.Count; i++)
+        {
+            isMatchedGrid[i].IsMatchedGrid();
+        }
+    }
     void ToggleScrollRect()
     {
         if (scrollRect == null) { return; }
@@ -160,5 +190,38 @@ public class GridGenerator : MonoBehaviour
 
         // Shuffle the final list
         gameGridsData = gameGridsData.OrderBy(x => Random.value).ToList();
+    }
+
+    public List<SaveGridData> GetGridData()
+    {
+        List<SaveGridData> data = new List<SaveGridData>();
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            Transform child = parent.GetChild(i);
+            Grid card = child.GetComponent<Grid>();
+            if (card == null) continue;
+
+            SaveGridData saveGridData = new SaveGridData();
+            saveGridData.itemType = card.itemsType;
+            saveGridData.isFliped = card.IsFaceUp;
+            saveGridData.isMatched = card.isMatched;
+            data.Add(saveGridData);
+        }
+        return data;
+    }
+
+    public void UpdateTurnsValueChange()
+    {
+        int turnsCount = int.Parse(totalTurns.text);
+        if (turnsCount > 10 && turnsCount < 50)
+        {
+            totalTurns.textComponent.color = Color.green;
+            GameManager.Instance?.UpdateTurnsText(turnsCount);
+
+        }
+        else
+        {
+            totalTurns.textComponent.color = Color.red;
+        }
     }
 }

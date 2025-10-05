@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -165,8 +165,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58d97faf39ccb5d449c85258e69f18a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridImage: {fileID: 7749334429005733525}
   isMatched: 0
+  gridImage: {fileID: 7749334429005733525}
+  bgPanel: {fileID: 7749334427936706569}
 --- !u!1 &7749334429005733527
 GameObject:
   m_ObjectHideFlags: 0

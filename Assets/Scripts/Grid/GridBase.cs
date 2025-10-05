@@ -10,7 +10,7 @@ public abstract class GridBase : MonoBehaviour, IPointerClickHandler
     public Sprite sprite { get => gridData.sprite; }
     public int gridId { get => gridData.gridID; }
     public Items itemsType { get => gridData.itemType; }
-    public bool IsFaceUp { get; protected set; } = false;
+    public bool IsFaceUp = false;
     public bool isMatched = false;
     public virtual void Init(GridData data)
     {
@@ -33,6 +33,6 @@ public abstract class GridBase : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         Flip();
-        EventBus.Invoke<string>(GameEvents.TURNS,"");
+        EventBus.Invoke<string>(GameEvents.TURNS, "");
     }
 }

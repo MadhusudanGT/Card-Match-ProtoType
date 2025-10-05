@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class Grid : GridBase
 {
-    [SerializeField] Image gridImage,bgPanel;
+    [SerializeField] Image gridImage, bgPanel;
     private void OnEnable()
     {
         EventBus.Subscribe<string>(GameEvents.RELEASE_ALL_GRIDS, ReleaseGrid);
@@ -20,6 +20,7 @@ public class Grid : GridBase
 
     protected override void UpdateVisual()
     {
+        bgPanel.enabled = true;
         gridImage.enabled = IsFaceUp;
         gridImage.sprite = sprite;
     }
@@ -50,8 +51,6 @@ public class Grid : GridBase
     }
     void ReleaseGrid(string reason)
     {
-        //transform.SetParent(null);
-        //PoolController.Instance?.DespawnCard(this);
         gridImage.enabled = false;
         bgPanel.enabled = false;
     }
@@ -63,5 +62,16 @@ public class Grid : GridBase
         {
             ReleaseGrid("");
         });
+    }
+    public void FlipedGridLoadData()
+    {
+        Flip();
+    }
+
+    public void IsMatchedGrid()
+    {
+        IsFaceUp = true;
+        SetMatched();
+        ReleaseGrid("");
     }
 }
