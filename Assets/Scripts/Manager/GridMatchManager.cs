@@ -42,6 +42,7 @@ public class GridMatchManager : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         if (first.itemsType == second.itemsType)
         {
+            SoundManager.Instance?.PlayMatch();
             first.SetMatched();
             second.SetMatched();
             matchedPairs++;
@@ -56,6 +57,7 @@ public class GridMatchManager : MonoBehaviour
         }
         else
         {
+            SoundManager.Instance?.PlayMismatch();
             first.WrongMatch();
             second.WrongMatch();
         }

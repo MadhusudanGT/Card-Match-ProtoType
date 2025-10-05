@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     }
     void GameStatus(bool gameStatus)
     {
+        SoundManager.Instance?.PlayGameOver();
         uiManager.GameEndStatus(gameStatus);
         gameState = global::GameStatus.Completed;
     }

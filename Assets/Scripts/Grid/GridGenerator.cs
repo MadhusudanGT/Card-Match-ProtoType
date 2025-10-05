@@ -144,6 +144,8 @@ public class GridGenerator : MonoBehaviour
         {
             isMatchedGrid[i].IsMatchedGrid();
         }
+        isFlipedGrid.Clear();
+        isMatchedGrid.Clear();
     }
     void ToggleScrollRect()
     {
