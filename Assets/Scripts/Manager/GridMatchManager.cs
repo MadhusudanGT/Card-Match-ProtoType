@@ -23,7 +23,6 @@ public class GridMatchManager : MonoBehaviour
     {
         if (isCheckingMatch)
         {
-            Debug.Log(isCheckingMatch+"...On Grid Flipped.." + grid.itemsType);
             return;
         }
 
