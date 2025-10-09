@@ -45,8 +45,10 @@ public class GameManager : MonoBehaviour
     void FlipAction(string msg)
     {
         numberOfTurnsLeft--;
+        int total = gridConfig.rows * gridConfig.cols / 2;
+
         uiManager.UpdateTurnLeftTxt(numberOfTurnsLeft);
-        if (numberOfTurnsLeft <= 0)
+        if (numberOfTurnsLeft <= 0 && gridMatchManager.matchedPairs != total)
         {
             EventBus.Invoke<bool>(GameEvents.GAME_END, false);
         }

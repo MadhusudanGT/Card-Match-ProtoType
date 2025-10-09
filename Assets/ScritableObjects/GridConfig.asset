@@ -37,4 +37,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f7a3e24525ccd2b469772ac49298423a, type: 2}
   - {fileID: 11400000, guid: b09be4ccdd29ec048b1aeb9c3e6ba887, type: 2}
   - {fileID: 11400000, guid: 65dd5a7e5923ed84b865bca13b07f1df, type: 2}
-  numberOfTurns: 20
+  numberOfTurns: 30

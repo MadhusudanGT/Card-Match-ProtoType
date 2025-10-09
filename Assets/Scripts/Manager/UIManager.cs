@@ -37,6 +37,7 @@ public class UIManager : MonoBehaviour
     {
         popUp.gameObject.SetActive(true);
         winingTxt.text = gameStatus ? "You Won the Game!" : "You Lost the Game!";
+        winingTxt.color = gameStatus ? Color.green : Color.red;
     }
 
     public void UpdateTurnLeftTxt(int turnLeft)
